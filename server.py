@@ -91,7 +91,7 @@ def start_server():
                     else:
                         print(f"Message received: {message}")
                         if message.upper() == "QUIT":
-                            print("Client requested to quit. Shutting down server.")
+                            print("Client requested to quit.")
                             break
                         conn.sendall(message.encode('utf-8'))
 
