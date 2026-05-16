@@ -17,8 +17,10 @@ def get_input():
     """
     global server_run
     while server_run:
+        # delay so input text can show up
         time.sleep(0.5)
         server_cmd = input("Server: ")
+        # if server command is quit then exit server
         if server_cmd.upper() == "QUIT":
             server_run = False
             print("Server Terminated")
@@ -96,6 +98,7 @@ def start_server():
                         
                 print("Client disconnected")
 if __name__ == "__main__":
+    # added threading support
     t1 = Thread(target=start_server)
     t2 = Thread(target=get_input)
     t2.daemon = True
