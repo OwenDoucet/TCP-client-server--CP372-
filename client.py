@@ -20,7 +20,7 @@ def start_client():
 
                 if cmd.upper() == "QUIT": break
                 data = s.recv(1024)
-                print("Server response: {data.decode('utf-8')}")
+                print(f"Server response: {data.decode('utf-8')}")
         except ConnectionRefusedError:
             print("Error: server is unavailable")
 
