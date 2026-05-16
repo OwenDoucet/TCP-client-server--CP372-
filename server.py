@@ -36,14 +36,17 @@ def start_server():
         s.bind((HOST, PORT))
         s.listen() #listening for connections
 
+        # a 1 second timeout to prevent s.accecpt() from holding
         s.settimeout(1.0)
         print(f"Server has been started on {HOST}, {PORT}. Waiting for client connection...")
 
 
 
         while server_run:
-            #accepting a connection
+            # try and wait 1 second for connection, if no connection, wait again
+            # this is required so thread doesnt lock
             try:
+                #accepting a connection
                 conn, addr = s.accept()
             except socket.timeout:
                 continue
