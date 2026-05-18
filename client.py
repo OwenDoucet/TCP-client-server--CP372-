@@ -16,13 +16,16 @@ def start_client():
                 #user input
                 cmd = input("> ")
                 if not cmd: continue
-                #TODO: LOGIN command
+                
+                #LOGIN COMMAND
+                if cmd.upper().startswith("LOGIN") or cmd.upper() == "LOGIN":
+                    s.sendall(cmd.encode('utf-8'))
+                    data = s.recv(1024)
+                    print(f"Server response: {data.decode('utf-8')}")
 
                 # MSG command - handle simple message
-                if cmd.upper().startswith("MSG ") or cmd.upper() == "MSG":
-                    parts = cmd.split(' ', 1)
-                    msg_content = parts[1] if len(parts) > 1 else " "
-                    s.sendall(msg_content.encode('utf-8'))
+                elif cmd.upper().startswith("MSG ") or cmd.upper() == "MSG":
+                    s.sendall(cmd.encode('utf-8'))
                     data = s.recv(1024)
                     print(f"Server response: {data.decode('utf-8')}")
 
@@ -59,7 +62,7 @@ def start_client():
                     s.sendall(cmd.encode('utf-8'))
                     if cmd.upper() == "QUIT": break
                     data = s.recv(1024)
-                    print(f"Server response: {data.decode('utf-8')}")
+                    print(f"Server Response: {data.decode('utf-8')}")
         except ConnectionRefusedError:
             print("Error: server is unavailable")
 

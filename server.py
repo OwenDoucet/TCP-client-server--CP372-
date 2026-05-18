@@ -53,6 +53,8 @@ def start_server():
             with conn:
                 print(f"client connected from {addr}")
                 
+                authenticated = False
+
                 while True:
                     #communication between server/client
                     data = conn.recv(1024)
@@ -65,9 +67,37 @@ def start_server():
                     except UnicodeDecodeError:
                         message = ""
                     
+                    #login handling
+                    if message.upper().startswith("LOGIN "):
+                        parts = message.split(' ', 1)
+                        if len(parts) > 1:
+                            username = parts[1].strip()
+
+                            if not os.path.exists("users.txt"):
+                                with open("users.txt", "w") as f:
+                                    f.write("Owen\nLeonie\nKevin")
+                            
+                            with open("users.txt", "r") as f:
+                                valid_users = [line.strip() for line in f.readlines()]
+
+                            if username in valid_users:
+                                authenticated = True
+                                print(f"User '{username}' successfully authenticated.")
+                                conn.sendall(f"ACK: Welcome {username}!".encode('utf-8'))
+                            else:
+                                print(f"Failed login attempt for username: '{username}'")
+                                conn.sendall(b"ERR: Access Denied. Invalid Username.")
+                        else:
+                            conn.sendall(b"ERR: Usage: LOGIN username")
+                    
+                    elif not authenticated:
+                        if message.upper() == "QUIT":
+                            print("Unauthenticated client requested to quit.")
+                            break
+                        conn.sendall(b"ERR: You must LOGIN first.")
                     # step 2. FILE
                     # expect format "FILE filename filesize" and handle file upload
-                    if message.upper().startswith("FILE "):
+                    elif message.upper().startswith("FILE "):
                         parts = message.split()
                         if len(parts) >= 3:
                             filename = parts[1]
@@ -92,11 +122,17 @@ def start_server():
 
                    # step 2 - case 2: QUIT or other messages
                     else:
-                        print(f"Message received: {message}")
                         if message.upper() == "QUIT":
                             print("Client requested to quit.")
                             break
-                        conn.sendall(message.encode('utf-8'))
+                        if message.upper().startswith("MSG "):
+                            parts = message.split(' ', 1)
+                            msg_content = parts[1] if len(parts) > 1 else ""
+                            print(f"Message receieved: {msg_content}")
+                            conn.sendall(b"ACK: message.received")
+                        else:
+                            print(f"Invalid protocol command received: {message}")
+                            conn.sendall(b"ERR: Invalid Command. Use MSG, FILE, or QUIT.")
 
                         
                 print("Client disconnected")
