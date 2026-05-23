@@ -136,6 +136,10 @@ def start_server():
 
                         
                 print("Client disconnected")
+
+                # Force print this line cause threading
+                print("\rServer: ", end="", flush=True)
+                
 if __name__ == "__main__":
     # added threading support
     t1 = Thread(target=start_server)
