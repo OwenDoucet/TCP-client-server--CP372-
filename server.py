@@ -93,7 +93,6 @@ def start_server():
                     elif not authenticated:
                         if message.upper() == "QUIT":
                             print("Unauthenticated client requested to quit.")
-                            server_run = False
                             break
                         conn.sendall(b"ERR: You must LOGIN first.")
                     # step 2. FILE
@@ -125,7 +124,6 @@ def start_server():
                     else:
                         if message.upper() == "QUIT":
                             print("Client requested to quit.")
-                            server_run = False
                             break
                         if message.upper().startswith("MSG "):
                             parts = message.split(' ', 1)
