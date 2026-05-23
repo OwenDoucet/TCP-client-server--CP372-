@@ -57,7 +57,10 @@ def start_server():
 
                 while True:
                     #communication between server/client
-                    data = conn.recv(1024)
+                    try:
+                        data = conn.recv(1024)
+                    except (ConnectionResetError, BrokenPipeError):
+                        break
                     if not data:
                         break
                     
@@ -125,11 +128,15 @@ def start_server():
                         if message.upper() == "QUIT":
                             print("Client requested to quit.")
                             break
-                        if message.upper().startswith("MSG "):
+                        if message.upper().startswith("MSG ") or message.upper() == "MSG":
                             parts = message.split(' ', 1)
-                            msg_content = parts[1] if len(parts) > 1 else ""
-                            print(f"Message receieved: {msg_content}")
-                            conn.sendall(b"ACK: message.received")
+                            msg_content = parts[1].strip() if len(parts) > 1 else ""
+                            
+                            if not msg_content:
+                                conn.sendall(b"ERR: Cannot send an empty message.")
+                            else:
+                                print(f"Message receieved: {msg_content}")
+                                conn.sendall(b"ACK: message.received")
                         else:
                             print(f"Invalid protocol command received: {message}")
                             conn.sendall(b"ERR: Invalid Command. Use MSG, FILE, or QUIT.")
