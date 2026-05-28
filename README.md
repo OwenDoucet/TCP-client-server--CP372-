@@ -16,21 +16,21 @@ All dependencies should already be built into Python
 -time
 
 ## Example Commands
-Client can:
-LOGIN Kevin - login server with username "Kevin"
-FILE test.txt - upload "test.txt" to server
-MSG hello! - send message to server
-QUIT - disconnect the server and close client.py
+**Client** can:
+**LOGIN** Kevin - login server with username "Kevin"
+**FILE** test.txt - upload "test.txt" to server
+**MSG** hello! - send message to server
+**QUIT** - disconnect the server and close client.py
 
 
-Server can:
-QUIT - close server when all clients have disconnected
+**Server** can:
+**QUIT** - close server when all clients have disconnected
 
 ## Folder Structure
-->README.md
-->server_files
----->test.txt
-->client.py
-->server.py
-->test.txt
-->users.txt
+- README.md
+- server_files
+    - test.txt
+- client.py
+- server.py
+- test.txt
+- users.txt
