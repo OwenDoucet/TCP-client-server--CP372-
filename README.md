@@ -27,10 +27,10 @@ Server can:
 QUIT - close server when all clients have disconnected
 
 ## Folder Structure
->README.md
->server_files
--->test.txt
->client.py
->server.py
->test.txt
->users.txt
+->README.md
+->server_files
+---->test.txt
+->client.py
+->server.py
+->test.txt
+->users.txt
